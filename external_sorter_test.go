@@ -1,6 +1,8 @@
 package msort
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -10,12 +12,20 @@ func TestExternalSorterSort(t *testing.T) {
 	defer os.Remove(unsortedFile)
 
 	es := NewExternalSorter(3, 3)
-	es.Sort(unsortedFile)
+	sortedFile := es.Sort(unsortedFile)
+
+	printSortedFileContents(sortedFile)
 }
 
 func createUnsortedTestFile() *os.File {
 	tmpfile := createTemporaryFile()
-	tmpfile.WriteString("g\r\na\r\nl\r\nd\r\nu\r\nz\r\nc\r\nx")
+	tmpfile.WriteString("g\na\nl\nd\nu\nz\nc\nx")
 	tmpfile.Close()
 	return tmpfile
+}
+
+func printSortedFileContents(sortedFileName string) {
+	data, err := ioutil.ReadFile(sortedFileName)
+	check(err)
+	fmt.Println(data)
 }
