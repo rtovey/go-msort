@@ -1,7 +1,12 @@
 package msort
 
+import (
+	"sync"
+)
+
 type PriorityQueue struct {
 	items []*string
+	lock  sync.Mutex
 }
 
 func NewPriorityQueue() *PriorityQueue {
@@ -14,11 +19,17 @@ func NewPriorityQueue() *PriorityQueue {
 }
 
 func (pq *PriorityQueue) Push(value string) {
+	pq.lock.Lock()
+	defer pq.lock.Unlock()
+
 	pq.items = append(pq.items, &value)
 	pq.swim()
 }
 
 func (pq *PriorityQueue) Pop() string {
+	pq.lock.Lock()
+	defer pq.lock.Unlock()
+
 	if pq.size() < 1 {
 		return ""
 	}
@@ -33,6 +44,9 @@ func (pq *PriorityQueue) Pop() string {
 }
 
 func (pq *PriorityQueue) IsEmpty() bool {
+	pq.lock.Lock()
+	defer pq.lock.Unlock()
+
 	return pq.size() == 0
 }
 

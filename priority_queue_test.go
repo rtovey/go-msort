@@ -6,8 +6,8 @@ func TestPriorityQueueItemsAreSorted(t *testing.T) {
 	pq := NewPriorityQueue()
 
 	pq.Push("z")
-	pq.Push("y")
 	pq.Push("x")
+	pq.Push("y")
 
 	assertEqual(t, "x", pq.Pop())
 	assertEqual(t, "y", pq.Pop())
