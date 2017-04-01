@@ -5,21 +5,13 @@ import "testing"
 func TestPriorityQueueItemsAreSorted(t *testing.T) {
 	pq := NewPriorityQueue()
 
-	pq.Push("a", 3)
-	pq.Push("b", 2)
-	pq.Push("c", 4)
+	pq.Push("z")
+	pq.Push("y")
+	pq.Push("x")
 
-	item, priority := pq.Pop()
-	assertEqual(t, "c", item)
-	assertEqual(t, 4, priority)
-
-	item, priority = pq.Pop()
-	assertEqual(t, "a", item)
-	assertEqual(t, 3, priority)
-
-	item, priority = pq.Pop()
-	assertEqual(t, "b", item)
-	assertEqual(t, 2, priority)
+	assertEqual(t, "x", pq.Pop())
+	assertEqual(t, "y", pq.Pop())
+	assertEqual(t, "z", pq.Pop())
 }
 
 func TestPriorityQueueIsEmptyOnInitilisation(t *testing.T) {
@@ -33,7 +25,7 @@ func TestPriorityQueueIsEmptyOnInitilisation(t *testing.T) {
 func TestPriorityQueueIsNotEmptyAfterPush(t *testing.T) {
 	pq := NewPriorityQueue()
 
-	pq.Push("a", 1)
+	pq.Push("a")
 
 	if pq.IsEmpty() {
 		t.Error("PriorityQueue is empty with one item")
@@ -43,7 +35,7 @@ func TestPriorityQueueIsNotEmptyAfterPush(t *testing.T) {
 func TestPriorityQueueIsEmptyAfterAllItemsPopped(t *testing.T) {
 	pq := NewPriorityQueue()
 
-	pq.Push("a", 1)
+	pq.Push("a")
 	pq.Pop()
 
 	if !pq.IsEmpty() {
@@ -51,23 +43,13 @@ func TestPriorityQueueIsEmptyAfterAllItemsPopped(t *testing.T) {
 	}
 }
 
-func TestPriorityQueueReturnsNilItemWhenEmpty(t *testing.T) {
+func TestPriorityQueueReturnsEmptyStringWhenEmpty(t *testing.T) {
 	pq := NewPriorityQueue()
 
-	item, _ := pq.Pop()
+	item := pq.Pop()
 
-	if item != nil {
+	if item != "" {
 		t.Error("Empty PriorityQueue does not return a nil item when popped")
-	}
-}
-
-func TestPriorityQueueReturnsZeroPriorityWhenEmpty(t *testing.T) {
-	pq := NewPriorityQueue()
-
-	_, priority := pq.Pop()
-
-	if priority != 0 {
-		t.Error("Empty PriorityQueue does not return 0 priority when popped")
 	}
 }
 

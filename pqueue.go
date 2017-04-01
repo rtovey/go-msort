@@ -1,23 +1,11 @@
 package msort
 
-type item struct {
-	value    interface{}
-	priority int
-}
-
 type PriorityQueue struct {
-	items []*item
-}
-
-func newItem(value interface{}, priority int) *item {
-	return &item{
-		value:    value,
-		priority: priority,
-	}
+	items []*string
 }
 
 func NewPriorityQueue() *PriorityQueue {
-	items := make([]*item, 1)
+	items := make([]*string, 1)
 	items[0] = nil // First element of the heap queue should always be nil
 
 	return &PriorityQueue{
@@ -25,25 +13,23 @@ func NewPriorityQueue() *PriorityQueue {
 	}
 }
 
-func (pq *PriorityQueue) Push(value interface{}, priority int) {
-	item := newItem(value, priority)
-
-	pq.items = append(pq.items, item)
+func (pq *PriorityQueue) Push(value string) {
+	pq.items = append(pq.items, &value)
 	pq.swim()
 }
 
-func (pq *PriorityQueue) Pop() (interface{}, int) {
+func (pq *PriorityQueue) Pop() string {
 	if pq.size() < 1 {
-		return nil, 0
+		return ""
 	}
 
-	var max *item = pq.items[1]
+	var min = *pq.items[1]
 
 	pq.exchange(1, pq.size())
 	pq.items = pq.items[0:pq.size()]
 	pq.sink()
 
-	return max.value, max.priority
+	return min
 }
 
 func (pq *PriorityQueue) IsEmpty() bool {
@@ -56,7 +42,7 @@ func (pq *PriorityQueue) size() int {
 
 func (pq *PriorityQueue) swim() {
 	k := pq.size()
-	for k > 1 && pq.less(k/2, k) {
+	for k > 1 && pq.greater(k/2, k) {
 		pq.exchange(k/2, k)
 		k = k / 2
 	}
@@ -65,13 +51,13 @@ func (pq *PriorityQueue) swim() {
 func (pq *PriorityQueue) sink() {
 	k := 1
 	for 2*k <= pq.size() {
-		var j int = 2 * k
+		var j = 2 * k
 
-		if j < pq.size() && pq.less(j, j+1) {
+		if j < pq.size() && pq.greater(j, j+1) {
 			j++
 		}
 
-		if !pq.less(k, j) {
+		if !pq.greater(k, j) {
 			break
 		}
 
@@ -80,12 +66,12 @@ func (pq *PriorityQueue) sink() {
 	}
 }
 
-func (pq *PriorityQueue) less(i, j int) bool {
-	return pq.items[i].priority < pq.items[j].priority
+func (pq *PriorityQueue) greater(i, j int) bool {
+	return *pq.items[i] > *pq.items[j]
 }
 
 func (pq *PriorityQueue) exchange(i, j int) {
-	var tempItem *item = pq.items[i]
+	var tempItem = pq.items[i]
 
 	pq.items[i] = pq.items[j]
 	pq.items[j] = tempItem
