@@ -14,12 +14,7 @@ func check(e error) {
 }
 
 func write(sortedData []string) string {
-	tmpfile, err := ioutil.TempFile("", "run")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(tmpfile.Name())
+	tmpfile := createTemporaryFile()
 
 	for _, line := range sortedData {
 		if _, err := tmpfile.WriteString(line + "\r\n"); err != nil {
@@ -32,6 +27,16 @@ func write(sortedData []string) string {
 	}
 
 	return tmpfile.Name()
+}
+
+func createTemporaryFile() *os.File {
+	tmpfile, err := ioutil.TempFile("", "run")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(tmpfile.Name())
+	return tmpfile
 }
 
 func cleanup(files []string) {
