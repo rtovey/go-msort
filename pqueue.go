@@ -1,4 +1,4 @@
-package pqueue
+package msort
 
 type item struct {
 	value    interface{}

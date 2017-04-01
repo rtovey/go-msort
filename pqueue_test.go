@@ -1,8 +1,7 @@
-package pqueue_test
+package msort
 
 import (
 	"fmt"
-	"go-msort/pqueue"
 	"testing"
 )
 
@@ -11,7 +10,7 @@ func TestItemsAddedToPriorityQueueAreSorted(t *testing.T) {
 		"a": 3, "b": 2, "c": 4,
 	}
 
-	pq := pqueue.NewPriorityQueue()
+	pq := NewPriorityQueue()
 
 	for key, value := range items {
 		pq.Push(key, value)
